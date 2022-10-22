@@ -48,4 +48,26 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+//update = atualização dados
+router.patch('/:id', async (req, res) => {
+  const id = req.params.id;
+  const { produto, valor, descricao } = req.body;
+
+  const data = {
+    produto,
+    valor,
+    descricao,
+  }
+
+  try {
+    const updatedPerson = await Produtos.updateOne({ _id: id }, data);
+    if (updatedPerson.matchedCount === 0) {
+      res.status(422).json({ message: 'Produto não encontrado!' })
+    }
+    res.status(200).json(data)
+  } catch (error) {
+    res.status(500).json({ erro: error })
+  }
+})
+
 module.exports = router;
